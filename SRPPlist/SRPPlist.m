@@ -53,6 +53,15 @@
     [mDic setDictionary:dic];
 }
 
+#pragma mark 新增或更新多筆
+- (void)createOrUpdateMultiple:(NSArray<NSDictionary *> *)dics
+{
+    for(NSDictionary *dic in dics)
+    {
+        [self createOrUpdate:dic];
+    }
+}
+
 #pragma mark 刪除
 - (void)deleteWithFilter:(NSPredicate *)filter
 {
