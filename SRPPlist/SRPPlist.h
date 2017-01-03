@@ -33,6 +33,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)createOrUpdate:(NSDictionary *)dic;
 
 /**
+ *  新增或更新多筆.
+ *
+ *  @param dics 多筆資料.
+ */
+- (void)createOrUpdateMultiple:(NSArray <NSDictionary *> *)dics;
+
+/**
  *  刪除 by filter.
  *
  *  @param filter 刪除的 filter.
