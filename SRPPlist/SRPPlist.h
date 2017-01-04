@@ -26,6 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithName:(NSString *)name;
 
 /**
+ *  新增.
+ *
+ *  @param dic 新增的 Dic.
+ */
+- (void)addDic:(NSDictionary *)dic;
+
+/**
  *  新增或更新.
  *
  *  @param dic 新增或更新的 NSDictionary.
@@ -38,6 +45,13 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param dics 多筆資料.
  */
 - (void)createOrUpdateMultiple:(NSArray <NSDictionary *> *)dics;
+
+/**
+ *  刪除.
+ *
+ *  @param dic 刪除的 Dic.
+ */
+- (void)deleteDic:(NSDictionary *)dic;
 
 /**
  *  刪除 by filter.
@@ -80,6 +94,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  儲存, 寫入 Sanbox folder.
  */
 - (void)save;
+
+/**
+ *  重新載入 Data.
+ */
+- (void)reloadData;
 
 @end
 
