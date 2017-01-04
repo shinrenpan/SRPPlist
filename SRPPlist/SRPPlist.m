@@ -31,12 +31,22 @@
 }
 
 #pragma mark - Public
+#pragma mark 新增
+- (void)addDic:(NSDictionary *)dic
+{
+    NSMutableDictionary *mDic = [dic mutableCopy];
+    mDic[@"Id"] = [NSUUID UUID].UUIDString;
+    mDic[@"update"] = @([NSDate date].timeIntervalSince1970);
+    
+    [_datas addObject:mDic];
+}
+
 #pragma mark 新增或更新
 - (void)createOrUpdate:(NSDictionary *)dic
 {
     if(!dic[@"Id"])
     {
-        [self __addDic:dic];
+        [self addDic:dic];
         return;
     }
     
@@ -45,7 +55,7 @@
     
     if(!filterArray.count)
     {
-        [self __addDic:dic];
+        [self addDic:dic];
         return;
     }
     
@@ -63,6 +73,19 @@
 }
 
 #pragma mark 刪除
+- (void)deleteDic:(NSDictionary *)dic
+{
+    if(!dic[@"Id"])
+    {
+        return;
+    }
+    
+    NSPredicate *filter = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
+    
+    [self deleteWithFilter:filter];
+}
+
+#pragma mark 刪除 by filter
 - (void)deleteWithFilter:(NSPredicate *)filter
 {
     NSArray *filterArray = [_datas filteredArrayUsingPredicate:filter];
@@ -104,17 +127,13 @@
     [_datas writeToFile:collectionPath atomically:YES];
 }
 
-#pragma mark - Private
-#pragma mark 新增
-- (void)__addDic:(NSDictionary *)dic
+#pragma mark 重新載入 Data
+- (void)reloadData
 {
-    NSMutableDictionary *mDic = [dic mutableCopy];
-    mDic[@"Id"] = [NSUUID UUID].UUIDString;
-    mDic[@"update"] = @([NSDate date].timeIntervalSince1970);
-    
-    [_datas addObject:mDic];
+    [self __setup];
 }
 
+#pragma mark - Private
 #pragma mark 初始設置
 - (void)__setup
 {
