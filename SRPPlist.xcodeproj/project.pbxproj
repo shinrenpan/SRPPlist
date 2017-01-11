@@ -29,20 +29,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8CFBBB1F05AE2FB89F6BED0DE1CBBE25 = {
-			isa = PBXGroup;
-			children = (
-				737F69630FE31CAB2FF143CE8E685E73 /* Products */,
-				BDCDBBAB82D00E803920744442944BC2 /* SRPPlist */,
-			);
-			sourceTree = "<group>";
-		};
 		737F69630FE31CAB2FF143CE8E685E73 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				5971AB1FEAAFE2CB4E427ECFDBB2DF15 /* SRPPlist.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8CFBBB1F05AE2FB89F6BED0DE1CBBE25 = {
+			isa = PBXGroup;
+			children = (
+				737F69630FE31CAB2FF143CE8E685E73 /* Products */,
+				BDCDBBAB82D00E803920744442944BC2 /* SRPPlist */,
+			);
 			sourceTree = "<group>";
 		};
 		BDCDBBAB82D00E803920744442944BC2 /* SRPPlist */ = {
@@ -71,7 +71,7 @@
 /* Begin PBXNativeTarget section */
 		BC9A6122755A9CD5C1C3833A2A04E897 /* SRPPlist */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 082268E0A1678A12AA4D612B1E8DB273 /* Build configuration list for PBXNativeTarget "SRPPlist" */;
+			buildConfigurationList = E4D4EC9276A8E50E119E4FAAA1202CCA /* Build configuration list for PBXNativeTarget "SRPPlist" */;
 			buildPhases = (
 				55B5CE2A8F38E31788894EAB9BE30702 /* Sources */,
 				CE963EA82F450CCF1FAAC6E430AC3CCC /* Frameworks */,
@@ -192,6 +192,26 @@
 			};
 			name = Debug;
 		};
+		0D4D46061DFA202C906A77DF700ED1A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BITCODE_GENERATION_MODE = bitcode;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SRPPlist/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_CFLAGS = "-fembed-bitcode";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shinrenpan.SRPPlist;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		9C391D6CF8AD2927C56408D1BC021CA5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -237,7 +257,7 @@
 			};
 			name = Release;
 		};
-		D4631CFF982F72C6B83C900A43E9CCC1 /* Debug */ = {
+		2FFC02F2C4E7D63E2C89FF93ABEE1E9D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BITCODE_GENERATION_MODE = marker;
@@ -257,29 +277,18 @@
 			};
 			name = Debug;
 		};
-		7F89563006E2847F5D8CF66BA4C6CDB3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BITCODE_GENERATION_MODE = bitcode;
-				CODE_SIGN_IDENTITY = "";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SRPPlist/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_CFLAGS = "-fembed-bitcode";
-				PRODUCT_BUNDLE_IDENTIFIER = com.shinrenpan.SRPPlist;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E4D4EC9276A8E50E119E4FAAA1202CCA /* Build configuration list for PBXNativeTarget "SRPPlist" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FFC02F2C4E7D63E2C89FF93ABEE1E9D /* Debug */,
+				0D4D46061DFA202C906A77DF700ED1A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B57EB6ACE6F123FCE71A7A906CBB38D1 /* Build configuration list for PBXProject "SRPPlist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -288,14 +297,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		082268E0A1678A12AA4D612B1E8DB273 /* Build configuration list for PBXNativeTarget "SRPPlist" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D4631CFF982F72C6B83C900A43E9CCC1 /* Debug */,
-				7F89563006E2847F5D8CF66BA4C6CDB3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
