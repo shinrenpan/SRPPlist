@@ -6,10 +6,44 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, SRPPlistStatus)
+{
+    SRPPlistStatusCacheAdd,
+    SRPPlistStatusCacheUpdate,
+    SRPPlistStatusCacheRemove,
+    SRPPlistStatusCacheRemoveAll,
+    SRPPlistStatusDiskAdd,
+    SRPPlistStatusDiskUpdate,
+    SRPPlistStatusDiskRemove,
+    SRPPlistStatusDiskRemoveAll,
+    SRPPlistStatusDiskSave
+};
+
+typedef void(^SRPPlistStatusChanged)(SRPPlistStatus status);
+
 /**
- * 使用 Plist 當作簡易 DataBase
+ * Plist as DataBase.
  */
 @interface SRPPlist : NSObject
+
+
+///-----------------------------------------------------------------------------
+/// @name Properties
+///-----------------------------------------------------------------------------
+
+/**
+ *  SRPPlist 狀態改變 block.
+ */
+@property (nonatomic, copy) SRPPlistStatusChanged statusChanged;
+
+/**
+ *  是否使用 Cache, Default = YES.
+ *
+ *  Cache = YES 時, 所有資料在 saveCache 前, 將不會儲存到 Disk 裡.
+ *
+ *  Cache = NO 時, 所有資料處理將自動儲存到 disk 裡.
+ */
+@property (nonatomic, assign) BOOL cache;
 
 
 ///-----------------------------------------------------------------------------
@@ -28,77 +62,67 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  新增.
  *
- *  @param dic 新增的 Dic.
+ *  @param dic 新增的資料.
+ *
+ *  @return 是否新增成功.
  */
-- (void)addDic:(NSDictionary *)dic;
+- (BOOL)add:(NSDictionary *)dic;
 
 /**
- *  新增或更新.
+ *  修改.
  *
- *  @param dic 新增或更新的 NSDictionary.
- */
-- (void)createOrUpdate:(NSDictionary *)dic;
-
-/**
- *  新增或更新多筆.
+ *  @param dic 更新的資料.
  *
- *  @param dics 多筆資料.
+ *  @return 是否更新成功.
  */
-- (void)createOrUpdateMultiple:(NSArray <NSDictionary *> *)dics;
+- (BOOL)update:(NSDictionary *)dic;
 
 /**
  *  刪除.
  *
- *  @param dic 刪除的 Dic.
- */
-- (void)deleteDic:(NSDictionary *)dic;
-
-/**
- *  刪除 by filter.
+ *  @param dic 刪除的資料.
  *
- *  @param filter 刪除的 filter.
+ *  @return 刪除是否成功.
  */
-- (void)deleteWithFilter:(NSPredicate *)filter;
+- (BOOL)remove:(NSDictionary *)dic;
 
 /**
  *  刪除全部.
+ *
+ *  @return 刪除是否成功.
  */
-- (void)deletaAll;
+- (BOOL)removeAll;
 
 /**
- *  查詢 by filter.
+ *  查詢.
  *
- *  @param filter 查詢的 filter.
+ *  @param filter 過濾條件.
+ *  @param sort   排序.
  *
- *  @return 返回查詢資料.
+ *  @return 查詢到到資料.
  */
-- (nullable NSArray <NSMutableDictionary *> *)queryWithFileter:(NSPredicate *)filter;
-
-/**
- *  查詢 by range.
- *
- *  @param range 查詢的 range.
- *
- *  @return 返回查詢的資料
- */
-- (nullable NSArray <NSMutableDictionary *> *)queryWithRange:(NSRange)range;
+- (nullable NSArray <NSMutableDictionary *> *)queryByFileter:(NSPredicate *)filter sortBy:(nullable NSArray <NSSortDescriptor *> *)sort;
 
 /**
  *  查詢全部.
  *
- *  @return 返回查詢的資料.
+ *  @param sort 排序.
+ *
+ *  @return 查詢到的資料.
  */
-- (nullable NSArray <NSMutableDictionary *> *)queryAll;
+- (nullable NSArray <NSMutableDictionary *> *)queryAllSortBy:(nullable NSArray <NSSortDescriptor *> *)sort;
 
 /**
- *  儲存, 寫入 Sanbox folder.
+ *  儲存 Cache 資料.
+ *
+ *  @return 儲存是否成功.
  */
-- (void)save;
+- (BOOL)saveCache;
 
 /**
- *  重新載入 Data.
+ *  Reload Cache 資料.
  */
-- (void)reloadData;
+- (void)reloadCache;
 
 @end
 
