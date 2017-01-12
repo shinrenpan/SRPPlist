@@ -7,20 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5AAF39E41E2750DC00401D30 /* SRPPlist+Cache.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAF39E21E2750DC00401D30 /* SRPPlist+Cache.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		5AAF39E51E2750DC00401D30 /* SRPPlist+Cache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAF39E31E2750DC00401D30 /* SRPPlist+Cache.m */; };
-		5AAF39E81E2750EC00401D30 /* SRPPlist+Disk.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AAF39E61E2750EC00401D30 /* SRPPlist+Disk.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		5AAF39E91E2750EC00401D30 /* SRPPlist+Disk.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAF39E71E2750EC00401D30 /* SRPPlist+Disk.m */; };
 		843371AD8AB6039EB5C5EB4362A01681 /* SRPPlist.h in Headers */ = {isa = PBXBuildFile; fileRef = C2B3F27492F5C0ED9725C9302E3C9469 /* SRPPlist.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBFB1C0D3FE2F00A0D8A0919CB1B13BF /* SRPPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = E9660DC52417BCEEADFC6459FC3F841C /* SRPPlist.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5971AB1FEAAFE2CB4E427ECFDBB2DF15 /* SRPPlist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SRPPlist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5AAF39E21E2750DC00401D30 /* SRPPlist+Cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SRPPlist+Cache.h"; sourceTree = "<group>"; };
-		5AAF39E31E2750DC00401D30 /* SRPPlist+Cache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SRPPlist+Cache.m"; sourceTree = "<group>"; };
-		5AAF39E61E2750EC00401D30 /* SRPPlist+Disk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SRPPlist+Disk.h"; sourceTree = "<group>"; };
-		5AAF39E71E2750EC00401D30 /* SRPPlist+Disk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SRPPlist+Disk.m"; sourceTree = "<group>"; };
 		64F9674D1F9BADB9E3D71341B58E36D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C2B3F27492F5C0ED9725C9302E3C9469 /* SRPPlist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRPPlist.h; sourceTree = "<group>"; };
 		E9660DC52417BCEEADFC6459FC3F841C /* SRPPlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRPPlist.m; sourceTree = "<group>"; };
@@ -59,10 +51,6 @@
 				64F9674D1F9BADB9E3D71341B58E36D1 /* Info.plist */,
 				C2B3F27492F5C0ED9725C9302E3C9469 /* SRPPlist.h */,
 				E9660DC52417BCEEADFC6459FC3F841C /* SRPPlist.m */,
-				5AAF39E21E2750DC00401D30 /* SRPPlist+Cache.h */,
-				5AAF39E31E2750DC00401D30 /* SRPPlist+Cache.m */,
-				5AAF39E61E2750EC00401D30 /* SRPPlist+Disk.h */,
-				5AAF39E71E2750EC00401D30 /* SRPPlist+Disk.m */,
 			);
 			path = SRPPlist;
 			sourceTree = "<group>";
@@ -74,8 +62,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5AAF39E41E2750DC00401D30 /* SRPPlist+Cache.h in Headers */,
-				5AAF39E81E2750EC00401D30 /* SRPPlist+Disk.h in Headers */,
 				843371AD8AB6039EB5C5EB4362A01681 /* SRPPlist.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -149,8 +135,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FBFB1C0D3FE2F00A0D8A0919CB1B13BF /* SRPPlist.m in Sources */,
-				5AAF39E91E2750EC00401D30 /* SRPPlist+Disk.m in Sources */,
-				5AAF39E51E2750DC00401D30 /* SRPPlist+Cache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

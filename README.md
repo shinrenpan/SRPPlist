@@ -19,7 +19,7 @@ SRPPlist *db = [[SRPPlist alloc]initWithName:@"db"];
 
 
 ### 新增 ###
-使用 `add:` 新增一筆資料, 新增的資料將自動新建或複寫 Id 跟 update,  
+使用 `add:`, `addMultiple:` 新增一筆或多筆資料, 新增的資料將自動新建或複寫 Id 跟 update,  
 Id 型態為 NSString (NSUUID String), update 型態為 NSNumber (NSDate timeIntervalSince1970).  
 例如:
 
@@ -67,8 +67,13 @@ NSDictionary *newValue = @{@"name" : @"Pan Shinren"};
 > 當過濾條件查不到資料時, 將返回 NO.
 
 
+### 新增 OR 修改
+使用 `createOrUpdate:where:` 可以新增或是修改資料.  
+當過濾條件成功將執行修改, 失敗將執行新增, filter = nil 時, 將強制新增.
+
+
 ### 刪除 ###
-使用 `remove:`, `removeByFilter:`, `removeAll` 來刪除資料.
+使用 `remove:`, `removeWhere:`, `removeAll` 來刪除資料.
 
 ```objc
 NSMutableDictionary *user = ...... from db
@@ -80,64 +85,71 @@ NSPredicate *filter = [NSPredicate predicateWithFormat:@"Id == 213D74EE-9799-471
 [_db removeAll];
 
 ```
-> 基本上 remove: 等同於 remove:where:, 過濾條件就是使用 Id.  
+> 基本上 remove: 等同於 removeWhere:, 過濾條件就是使用 Id.  
 > 當過濾條件查不到資料時, 將返回 NO.
 
 
 ### 查詢 ###
-使用 `queryByFileter:sortBy`, `queryAllSortBy:` 來查詢.
+使用 `queryWhere:sort:`, `queryAllSort:` 來查詢.
 
 
 ### 儲存 ###
-當使用 cache 時, 未執行 `saveCache` 前, 所有的執行將不會寫入 plist,  
+當使用 cache 時, 未執行 `save` 前, 所有的執行將不會寫入 plist,  
 當不使用 cache 時, 所有執行將寫入 plist.
 
-> 使用 cache 時, 請記得執行 saveCache.
+> 使用 cache 時, 請記得執行 save. save 後把 cache 改為 NO.
 
 
-### Cache / NonCache
-SRPPlist 分為使用 cache 或是不使用, Default YES.
-
-當使用 Cache 時, 假設多個 SRPPlist 指向同一個 plist, 資料是各自分開的,  
-必須注意的是, 執行 `saveCache` 時, 會以最後執行的為主.  
+### Cache ###
+何時使用 Cache, 由於每次存取時都會操作 plist, 當使用迴圈時便可以暫時使用 cache.  
 例如:
 
 ```objc
-SRPPlist *db1 = [[SRPPlist alloc]initWithName:@"db"];
-SRPPlist *db2 = [[SRPPlist alloc]initWithName:@"db"];
+for(NSInteger i=0; i < 1000; i++)
+{
+	[_db createOrUpdate:@{@"data" : @(i)} where:nil];
+}
 
-[db1 add:user1];
-[db2 add:user2];
-
-[db1 queryAllSortBy:nil];
-[db2 queryAllSortBy:nil];
-
-// Now db1 只有 user1.
-// Now db2 只有 user2.
-
-[db2 saveCache];
-[db1 reloadCache];
-[db1 queryAllSortBy:nil];
-
-// Now db1 db2 都只有 user2, user1 不見了.
 ```
 
-不使用 Cache 時, 指向同一個 plist, 將直接從 disk 存取.  
-例如:
+未使用 cache 時, 消耗了 12.123653 秒.
+
+```objc
+_db.cache = YES;
+    
+for(NSInteger i=0; i < 1000; i++)
+{
+	[_db createOrUpdate:@{@"data" : @(i)} where:nil];
+}
+    
+[_db save];
+_db.cache = NO;
+```
+
+使用 cache 時, 消耗了 0.048382 秒.
+
+
+### 通知 ###
+SRPPlist 使用 Notification 通知變化, 當 cache = YES, 將不通知.  
+cache = NO 時, 支援以下變化通知:
+
+1. 新增一筆資料時:  
+	`NotificationName = SRPPLIST_db.name_ADD`
+2. 修改一筆資料時:  
+	`NotificationName = SRPPLIST_db.name_UPDATE`
+3. 移除一筆資料時:  
+	`NotificationName = SRPPLIST_db.name_REMOVE`
+4. 移除所有資料時:  
+	`NotificationName = SRPPLIST_db.name_REMOVEALL`
+	
+以下面為例子:
 
 ```objc
 SRPPlist *db1 = [[SRPPlist alloc]initWithName:@"db"];
-SRPPlist *db2 = [[SRPPlist alloc]initWithName:@"db"];
 
-[db1 add:user1];
-[db2 add:user2];
+NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_UPDATE", _db1.name];
 
-[db1 queryAllSortBy:nil];
-[db2 queryAllSortBy:nil];
-
-// Now db1, db2 都有 user1, user2
+[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(__dbUpdate:) name:name object:nil];
 ```
 
-何時使用 cache, 何時不使用?  
-當這個 plist 只有 `一個` object 存取時, 使用 cache,  
-當這個 plist 有 `多個` object 存取時, 就不要使用 cache.
+便可以監聽 db.plist 更新時的資訊, 可以 NSLog NSNotification.userInfo 取得更多資訊.
