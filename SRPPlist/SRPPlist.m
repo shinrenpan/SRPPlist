@@ -3,14 +3,12 @@
 //
 
 #import "SRPPlist.h"
-#import "SRPPlist+Disk.h"
-#import "SRPPlist+Cache.h"
 
 
 @interface SRPPlist ()
 
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSMutableArray <NSMutableDictionary *> *cacheDatas;
+@property (nonatomic, copy) NSMutableArray <NSMutableDictionary *> *cacheData;
 
 @end
 
@@ -27,25 +25,22 @@
         _name = name;
         
         [self __setup];
-        [self setCache:YES];
     }
     
     return self;
 }
 
-#pragma mark - Properties Setter
-#pragma mark Set cache
 - (void)setCache:(BOOL)cache
 {
     _cache = cache;
     
     if(_cache)
     {
-        [self cache_reload];
+        _cacheData = [[self __diskArray]mutableCopy];
     }
     else
     {
-        _cacheDatas = nil;
+        _cacheData = nil;
     }
 }
 
@@ -53,12 +48,67 @@
 #pragma mark 新增
 - (BOOL)add:(NSDictionary *)dic
 {
+    NSMutableArray *new = [NSMutableArray array];
+    NSMutableArray *diskArray = [self __diskArray];
+    NSMutableDictionary *mDic = [dic mutableCopy];
+    mDic[@"Id"] = [NSUUID UUID].UUIDString;
+    mDic[@"update"] = @([NSDate date].timeIntervalSince1970);
+    
+    [diskArray addObject:mDic];
+    [new addObject:[mDic copy]];
+    
     if(_cache)
     {
-        return [self cache_add:dic];
+        return NO;
     }
     
-    return [self disk_add:dic];
+    BOOL result = [self __save:diskArray];
+    
+    if(result)
+    {
+        NSDictionary *userInfo = @{@"new": [new copy]};
+        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_ADD", _name];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:name object:nil userInfo:userInfo];
+    }
+    
+    return result;
+}
+
+- (BOOL)addMultiple:(NSArray<NSDictionary *> *)dics
+{
+    NSMutableArray *diskArray = [self __diskArray];
+    
+    NSInteger count = 0;
+    
+    for(id dic in dics)
+    {
+        if(![dic isKindOfClass:[NSDictionary class]])
+        {
+            continue;
+        }
+        
+        NSMutableDictionary *mDic = [dic mutableCopy];
+        
+        mDic[@"Id"] = [NSUUID UUID].UUIDString;
+        mDic[@"update"] = @([NSDate date].timeIntervalSince1970);
+        
+        [diskArray addObject:mDic];
+        
+        count++;
+    }
+    
+    if(_cache)
+    {
+        return NO;
+    }
+    
+    if(count == 0)
+    {
+        return NO;
+    }
+    
+    return [self __save:diskArray];
 }
 
 #pragma mark 修改
@@ -77,23 +127,79 @@
 #pragma mark 修改 by Filter
 - (BOOL)update:(NSDictionary *)dic where:(NSPredicate *)filter
 {
-    if(_cache)
+    NSMutableArray *diskArray = [self __diskArray];
+    NSArray *filterArray = [diskArray filteredArrayUsingPredicate:filter];
+    
+    if(filterArray.count == 0)
     {
-        return [self cache_update:dic where:filter];
+        return NO;
     }
     
-    return [self disk_update:dic where:filter];
+    NSMutableArray *old = [NSMutableArray array];
+    NSMutableArray *new = [NSMutableArray array];
+    
+    BOOL result = NO;
+    
+    for(NSMutableDictionary *mDic in filterArray)
+    {
+        for(NSString *key in [dic allKeys])
+        {
+            if(mDic[key] == dic[key] || [mDic[key]isEqual:dic[key]] || [mDic[key]hash] == [dic[key]hash])
+            {
+                continue;
+            }
+            
+            result = YES;
+            
+            [old addObject:[mDic copy]];
+            
+            mDic[key] = dic[key];
+            
+            [new addObject:[mDic copy]];
+        }
+    }
+    
+    if(_cache)
+    {
+        return NO;
+    }
+    
+    if(!result)
+    {
+        return NO;
+    }
+    
+    // Update = YES, but save to disk 還沒確定
+    result = [self __save:diskArray];
+    
+    if(result)
+    {
+        NSDictionary *userInfo = @{@"old": [old copy], @"new": [new copy]};
+        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_UPDATE", self.name];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:name object:nil userInfo:userInfo];
+    }
+    
+    return result;
 }
 
 #pragma mark 新增 or 修改
 - (BOOL)createOrUpdate:(NSDictionary *)dic where:(NSPredicate *)filter
 {
-    if(_cache)
+    if(!filter)
     {
-        return [self cache_createOrUpdate:dic where:filter];
+        return [self add:dic];
     }
     
-    return [self disk_createOrUpdate:dic where:filter];
+    NSMutableArray *diskArray = [self __diskArray];
+    NSArray *filterArray = [diskArray filteredArrayUsingPredicate:filter];
+    
+    if(!filterArray.count)
+    {
+        return [self add:dic];
+    }
+    
+    return [self update:dic where:filter];
 }
 
 #pragma mark 刪除
@@ -112,64 +218,101 @@
 #pragma mark 刪除 By 條件
 - (BOOL)removeWhere:(NSPredicate *)filter
 {
-    if(_cache)
+    NSMutableArray *diskArray = [self __diskArray];
+    NSArray *filterArray      = [diskArray filteredArrayUsingPredicate:filter];
+    
+    if(!filterArray.count)
     {
-        return [self cache_removeWhere:filter];
+        return NO;
     }
     
-    return [self disk_removeWhere:filter];
+    NSArray *old = [filterArray copy];
+    
+    [diskArray removeObjectsInArray:filterArray];
+    
+    if(_cache)
+    {
+        return NO;
+    }
+    
+    BOOL result = [self __save:diskArray];
+    
+    if(result)
+    {
+        NSDictionary *userInfo = @{@"old": [old copy]};
+        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_REMOVE", self.name];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:name object:nil userInfo:userInfo];
+    }
+    
+    return result;
 }
 
 #pragma mark 刪除全部
 - (BOOL)removeAll
 {
+    NSMutableArray *diskArray = [self __diskArray];
+    [diskArray removeAllObjects];
+    
     if(_cache)
     {
-        return [self cache_removeAll];
+        return NO;
     }
     
-    return [self disk_removeAll];
+    BOOL result = [self __save:diskArray];
+    
+    if(result)
+    {
+        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_REMOVEALL", self.name];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:name object:nil userInfo:nil];
+    }
+    
+    return result;
 }
 
 #pragma mark 查詢
 - (NSArray<NSMutableDictionary *> *)queryWhere:(NSPredicate *)filter sort:(NSArray<NSSortDescriptor *> *)sort
 {
-    if(_cache)
+    NSMutableArray *diskArray = [self __diskArray];
+    
+    if(sort)
     {
-        return [[self cache_queryWhere:filter sort:sort]copy];
+        [diskArray sortUsingDescriptors:sort];
     }
     
-    return [[self disk_queryWhere:filter sort:sort]copy];
+    return [[diskArray filteredArrayUsingPredicate:filter]copy];
 }
 
 #pragma mark 查詢全部
 - (NSArray<NSMutableDictionary *> *)queryAllSort:(NSArray<NSSortDescriptor *> *)sort
 {
-    if(_cache)
+    NSMutableArray *diskArray = [self __diskArray];
+    
+    if(sort)
     {
-        return [[self cache_queryAllSort:sort]copy];
+        [diskArray sortUsingDescriptors:sort];
     }
     
-    return [[self disk_queryAllSort:sort]copy];
+    return [diskArray copy];
 }
 
-#pragma mark 儲存 Cache
+#pragma mark Save cache
 - (BOOL)save
 {
-    return [self cache_save];
-}
-
-#pragma mark Reload Cahce
-- (void)reload
-{
-    [self cache_reload];
+    if(!_cache || !_cacheData.count)
+    {
+        return NO;
+    }
+    
+    return [self __save:_cacheData];
 }
 
 #pragma mark - Private
 #pragma mark 初始設置
 - (void)__setup
 {
-    NSString *rootPath = [self disk_rootPath];
+    NSString *rootPath = [self __rootPath];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     if(![fileManager fileExistsAtPath:rootPath])
@@ -180,14 +323,62 @@
                                                        error:nil];
     }
     
-    NSString *plistPath = [self disk_plistPath];
+    NSString *plistPath = [self __plistPath];
     
     if(![NSArray arrayWithContentsOfFile:plistPath])
     {
         NSMutableArray *array = [NSMutableArray array];
         
-        [self disk_save:array];
+        [self __save:array];
     }
+}
+
+#pragma mark Array from disk
+- (NSMutableArray<NSMutableDictionary *> *)__diskArray
+{
+    if(_cache && _cacheData)
+    {
+        return _cacheData;
+    }
+    
+    NSMutableArray *result = [NSMutableArray array];
+    
+    NSString *plistPath = [self __plistPath];
+    NSArray <NSDictionary *> *temp = [NSArray arrayWithContentsOfFile:plistPath];
+    
+    for(NSDictionary *dic in temp)
+    {
+        [result addObject:[dic mutableCopy]];
+    }
+    
+    return result;
+}
+
+#pragma mark 根目錄
+- (NSString *)__rootPath
+{
+    NSString *documentsDirectory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject;
+    NSString *result = [documentsDirectory stringByAppendingPathComponent:@"SRPPlist"];
+    
+    return result;
+}
+
+#pragma mark Plist 檔案路徑
+- (NSString *)__plistPath
+{
+    NSString *rootPath = [self __rootPath];
+    NSString *fileName = [NSString stringWithFormat:@"%@.plist", self.name];
+    NSString *result   = [rootPath stringByAppendingPathComponent:fileName];
+    
+    return result;
+}
+
+#pragma mark Save to disk
+- (BOOL)__save:(NSArray *)array
+{
+    NSString *plistPath = [self __plistPath];
+    
+    return [array writeToFile:plistPath atomically:YES];
 }
 
 @end

@@ -25,9 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  是否使用 Cache, Default = YES.
  *
- *  Cache = YES 時, 所有資料在 saveCache 前, 將不會儲存到 Disk 裡.
+ *  Cache = YES 時, 所有資料在 save 前, 將不會儲存到 Disk 裡, 並且所有操作都返回 NO.
  *
- *  Cache = NO 時, 所有資料處理將自動儲存到 disk 裡.
+ *  Cache = NO 時, 所有資料處理將自動儲存到 disk 裡, 並發出 Notification 通知.
  */
 @property (nonatomic, assign) BOOL cache;
 
@@ -53,6 +53,15 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 是否新增成功.
  */
 - (BOOL)add:(NSDictionary *)dic;
+
+/**
+ *  新增多筆.
+ *
+ *  @param dics 新增的多筆資料.
+ *
+ *  @return 是否新增成功
+ */
+- (BOOL)addMultiple:(NSArray <NSDictionary *> *)dics;
 
 /**
  *  修改.
@@ -133,11 +142,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 儲存是否成功.
  */
 - (BOOL)save;
-
-/**
- *  Reload Cache 資料, 只有在 cache = YES, 才會作用
- */
-- (void)reload;
 
 @end
 
