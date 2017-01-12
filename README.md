@@ -153,3 +153,10 @@ NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_UPDATE", _db1.name];
 ```
 
 便可以監聽 db.plist 更新時的資訊, 可以 NSLog NSNotification.userInfo 取得更多資訊.
+
+
+### 其他 ###
+1. 小專案, 不保證一定沒 bug.
+2. 盡量不要多個 object 存取同一個 plist.
+3. For 迴圈時, 盡量使用 cache.
+4. 使用 cache 後記得 save 並取消 cache.

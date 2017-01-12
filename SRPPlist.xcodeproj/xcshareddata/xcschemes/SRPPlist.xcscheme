@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0810"
+   LastUpgradeVersion = "0820"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5AD7F5241E1B994900B205A5"
+               BlueprintIdentifier = "BC9A6122755A9CD5C1C3833A2A04E897"
                BuildableName = "SRPPlist.framework"
                BlueprintName = "SRPPlist"
                ReferencedContainer = "container:SRPPlist.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5AD7F5241E1B994900B205A5"
+            BlueprintIdentifier = "BC9A6122755A9CD5C1C3833A2A04E897"
             BuildableName = "SRPPlist.framework"
             BlueprintName = "SRPPlist"
             ReferencedContainer = "container:SRPPlist.xcodeproj">
@@ -63,7 +63,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5AD7F5241E1B994900B205A5"
+            BlueprintIdentifier = "BC9A6122755A9CD5C1C3833A2A04E897"
             BuildableName = "SRPPlist.framework"
             BlueprintName = "SRPPlist"
             ReferencedContainer = "container:SRPPlist.xcodeproj">

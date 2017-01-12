@@ -138,24 +138,47 @@
     NSMutableArray *old = [NSMutableArray array];
     NSMutableArray *new = [NSMutableArray array];
     
-    BOOL result = NO;
+    BOOL updated = NO;
     
     for(NSMutableDictionary *mDic in filterArray)
     {
+        [old addObject:[mDic copy]];
+        
         for(NSString *key in [dic allKeys])
         {
-            if(mDic[key] == dic[key] || [mDic[key]isEqual:dic[key]] || [mDic[key]hash] == [dic[key]hash])
+            if([key isEqualToString:@"Id"])
             {
                 continue;
             }
             
-            result = YES;
+            if(mDic[key] == dic[key])
+            {
+                continue;
+            }
             
-            [old addObject:[mDic copy]];
+            if([mDic[key]isEqual:dic[key]])
+            {
+                continue;
+            }
+            
+            if([mDic[key]hash] == [dic[key]hash])
+            {
+                continue;
+            }
+            
+            updated = YES;
             
             mDic[key] = dic[key];
-            
+        }
+        
+        if(updated)
+        {
+            mDic[@"update"] = @([NSDate date].timeIntervalSince1970);
             [new addObject:[mDic copy]];
+        }
+        else
+        {
+            [old removeLastObject];
         }
     }
     
@@ -164,15 +187,17 @@
         return NO;
     }
     
-    if(!result)
+    if(!updated)
     {
+        new = nil;
+        old = nil;
         return NO;
     }
     
     // Update = YES, but save to disk 還沒確定
-    result = [self __save:diskArray];
+    updated = [self __save:diskArray];
     
-    if(result)
+    if(updated)
     {
         NSDictionary *userInfo = @{@"old": [old copy], @"new": [new copy]};
         NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_UPDATE", self.name];
@@ -180,7 +205,7 @@
         [[NSNotificationCenter defaultCenter]postNotificationName:name object:nil userInfo:userInfo];
     }
     
-    return result;
+    return updated;
 }
 
 #pragma mark 新增 or 修改
@@ -341,17 +366,17 @@
         return _cacheData;
     }
     
-    NSMutableArray *result = [NSMutableArray array];
+    NSMutableArray *results = [NSMutableArray array];
     
     NSString *plistPath = [self __plistPath];
     NSArray <NSDictionary *> *temp = [NSArray arrayWithContentsOfFile:plistPath];
     
     for(NSDictionary *dic in temp)
     {
-        [result addObject:[dic mutableCopy]];
+        [results addObject:[dic mutableCopy]];
     }
     
-    return result;
+    return results;
 }
 
 #pragma mark 根目錄
