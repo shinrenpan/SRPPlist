@@ -6,16 +6,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString * const SRPPlistDiskStatusNotificaion;
-
-typedef NS_ENUM(NSInteger, SRPPlistDiskStatus)
-{
-    SRPPlistDiskStatusAdd      = 0,
-    SRPPlistDiskStatusUpdate   = 1,
-    SRPPlistDiskStatusRemove   = 2,
-    SRPPlistDiskStausRemoveAll = 3
-};
-
 
 /**
  * Plist as DataBase.
@@ -26,6 +16,11 @@ typedef NS_ENUM(NSInteger, SRPPlistDiskStatus)
 ///-----------------------------------------------------------------------------
 /// @name Properties
 ///-----------------------------------------------------------------------------
+
+/**
+ *  Plist name.
+ */
+@property (nonatomic, readonly) NSString *name;
 
 /**
  *  是否使用 Cache, Default = YES.
@@ -49,16 +44,6 @@ typedef NS_ENUM(NSInteger, SRPPlistDiskStatus)
  *  @return 返回 SRPPlist object.
  */
 - (instancetype)initWithName:(NSString *)name;
-
-/**
- *  新增或更新.
- *
- *  @param dic    新增或更新的資料.
- *  @param filter 過濾條件, 當過濾條件成功將執行 update:, 失敗將執行 add:, filter = nil 時, 將強制 add: .
- *
- *  @return 新增或更新成功.
- */
-- (BOOL)createOrUpdate:(NSDictionary *)dic where:(nullable NSPredicate *)filter;
 
 /**
  *  新增.
@@ -89,6 +74,16 @@ typedef NS_ENUM(NSInteger, SRPPlistDiskStatus)
 - (BOOL)update:(NSDictionary *)dic where:(NSPredicate *)filter;
 
 /**
+ *  新增或更新.
+ *
+ *  @param dic    新增或更新的資料.
+ *  @param filter 過濾條件, 當過濾條件成功將執行 update:, 失敗將執行 add:, filter = nil 時, 將強制 add: .
+ *
+ *  @return 新增或更新成功.
+ */
+- (BOOL)createOrUpdate:(NSDictionary *)dic where:(nullable NSPredicate *)filter;
+
+/**
  *  刪除.
  *
  *  @param dic 刪除的資料.
@@ -104,7 +99,7 @@ typedef NS_ENUM(NSInteger, SRPPlistDiskStatus)
  *
  *  @return 刪除是否成功.
  */
-- (BOOL)removeByFilter:(NSPredicate *)filter;
+- (BOOL)removeWhere:(NSPredicate *)filter;
 
 /**
  *  刪除全部.
@@ -121,7 +116,7 @@ typedef NS_ENUM(NSInteger, SRPPlistDiskStatus)
  *
  *  @return 查詢到到資料.
  */
-- (nullable NSArray <NSMutableDictionary *> *)queryByFileter:(NSPredicate *)filter sortBy:(nullable NSArray <NSSortDescriptor *> *)sort;
+- (nullable NSArray <NSMutableDictionary *> *)queryWhere:(NSPredicate *)filter sort:(nullable NSArray <NSSortDescriptor *> *)sort;
 
 /**
  *  查詢全部.
@@ -130,19 +125,19 @@ typedef NS_ENUM(NSInteger, SRPPlistDiskStatus)
  *
  *  @return 查詢到的資料.
  */
-- (nullable NSArray <NSMutableDictionary *> *)queryAllSortBy:(nullable NSArray <NSSortDescriptor *> *)sort;
+- (nullable NSArray <NSMutableDictionary *> *)queryAllSort:(nullable NSArray <NSSortDescriptor *> *)sort;
 
 /**
- *  儲存 Cache 資料.
+ *  將 Cache 資料寫入 disk, 只有在 cache = YES, 才會作用.
  *
  *  @return 儲存是否成功.
  */
-- (BOOL)saveCache;
+- (BOOL)save;
 
 /**
- *  Reload Cache 資料.
+ *  Reload Cache 資料, 只有在 cache = YES, 才會作用
  */
-- (void)reloadCache;
+- (void)reload;
 
 @end
 
