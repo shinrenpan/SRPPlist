@@ -4,6 +4,8 @@
 
 #import "SRPPlist.h"
 
+NSString * const SRPPlistDiskStatusNotificaion = @"SRPPlistDiskStatusNotificaion";
+
 
 @interface SRPPlist ()
 
@@ -32,6 +34,7 @@
 }
 
 #pragma mark - Properties Setter
+#pragma mark Set cache
 - (void)setCache:(BOOL)cache
 {
     _cache = cache;
@@ -47,6 +50,17 @@
 }
 
 #pragma mark - Public
+#pragma mark 新增 or 修改
+- (BOOL)createOrUpdate:(NSDictionary *)dic where:(NSPredicate *)filter
+{
+    if(_cache)
+    {
+        return [self __cacheCreateOrUpdate:dic where:filter];
+    }
+    
+    return [self __diskCreateOrUpdate:dic where:filter];
+}
+
 #pragma mark 新增
 - (BOOL)add:(NSDictionary *)dic
 {
@@ -61,23 +75,50 @@
 #pragma mark 修改
 - (BOOL)update:(NSDictionary *)dic
 {
-    if(_cache)
+    if(!dic[@"Id"])
     {
-        return [self __cacheUpdate:dic];
+        return NO;
     }
     
-    return [self __diskUpdate:dic];
+    NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
+    
+    
+    return [self update:dic where:filter];
+}
+
+#pragma mark 修改 by Filter
+- (BOOL)update:(NSDictionary *)dic where:(NSPredicate *)filter
+{
+    if(_cache)
+    {
+        return [self __cacheUpdate:dic where:filter];
+    }
+    
+    return [self __diskUpdate:dic where:filter];
 }
 
 #pragma mark 刪除
 - (BOOL)remove:(NSDictionary *)dic
 {
-    if(_cache)
+    if(!dic[@"Id"])
     {
-        return [self __cacheRemove:dic];
+        return NO;
     }
     
-    return [self __diskRemove:dic];
+    NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
+    
+    return [self removeByFilter:filter];
+}
+
+#pragma mark 刪除 By 條件
+- (BOOL)removeByFilter:(NSPredicate *)filter
+{
+    if(_cache)
+    {
+        return [self __cacheRemoveByFilter:filter];
+    }
+    
+    return [self __diskRemoveByFilter:filter];
 }
 
 #pragma mark 刪除全部
@@ -96,10 +137,10 @@
 {
     if(_cache)
     {
-        return [self __cacheQueryByFileter:filter sortBy:sort];
+        return [[self __cacheQueryByFileter:filter sortBy:sort]copy];
     }
     
-    return [self __diskQueryByFileter:filter sortBy:sort];
+    return [[self __diskQueryByFileter:filter sortBy:sort]copy];
 }
 
 #pragma mark 查詢全部
@@ -107,10 +148,10 @@
 {
     if(_cache)
     {
-        return [self __cacheQueryAllSortBy:sort];
+        return [[self __cacheQueryAllSortBy:sort]copy];
     }
     
-    return [self __diskQueryAllSortBy:sort];
+    return [[self __diskQueryAllSortBy:sort]copy];
 }
 
 #pragma mark 儲存 Cache
@@ -177,24 +218,51 @@
     }
 }
 
+#pragma mark Cache create or update
+- (BOOL)__cacheCreateOrUpdate:(NSDictionary *)dic where:(NSPredicate *)filter
+{
+    if(!filter)
+    {
+        return [self __cacheAdd:dic];
+    }
+    
+    NSArray *filterArray = [_cacheDatas filteredArrayUsingPredicate:filter];
+    
+    if(!filterArray.count)
+    {
+        return [self __cacheAdd:dic];
+    }
+    
+    return [self __cacheUpdate:dic where:filter];
+}
+
+#pragma mark disk create or update
+- (BOOL)__diskCreateOrUpdate:(NSDictionary *)dic where:(NSPredicate *)filter
+{
+    if(!filter)
+    {
+        return [self __diskAdd:dic];
+    }
+    
+    NSMutableArray *diskArray = [self __diskArray];
+    NSArray *filterArray = [diskArray filteredArrayUsingPredicate:filter];
+    
+    if(!filterArray.count)
+    {
+        return [self __diskAdd:dic];
+    }
+    
+    return [self __diskUpdate:dic where:filter];
+}
+
 #pragma mark Cache 新增
 - (BOOL)__cacheAdd:(NSDictionary *)dic
 {
-    NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
-    NSArray *filterArray = [_cacheDatas filteredArrayUsingPredicate:filter];
-    
-    if(filterArray.count > 0)
-    {
-        return NO;
-    }
-    
     NSMutableDictionary *mDic = [dic mutableCopy];
     mDic[@"Id"] = [NSUUID UUID].UUIDString;
     mDic[@"update"] = @([NSDate date].timeIntervalSince1970);
     
     [_cacheDatas addObject:mDic];
-    
-    _statusChanged ? _statusChanged(SRPPlistStatusCacheAdd) : nil;
     
     return YES;
 }
@@ -203,14 +271,6 @@
 - (BOOL)__diskAdd:(NSDictionary *)dic
 {
     NSMutableArray *diskArray = [self __diskArray];
-    NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
-    NSArray *filterArray = [diskArray filteredArrayUsingPredicate:filter];
-    
-    if(filterArray.count > 0)
-    {
-        return NO;
-    }
-    
     NSMutableDictionary *mDic = [dic mutableCopy];
     mDic[@"Id"] = [NSUUID UUID].UUIDString;
     mDic[@"update"] = @([NSDate date].timeIntervalSince1970);
@@ -221,82 +281,119 @@
     
     if(result)
     {
-        _statusChanged ? _statusChanged(SRPPlistStatusDiskAdd) : nil;
+        [[NSNotificationCenter defaultCenter]postNotificationName:SRPPlistDiskStatusNotificaion
+                                                           object:@(SRPPlistDiskStatusAdd)];
     }
     
     return result;
 }
 
 #pragma mark Cache 修改
-- (BOOL)__cacheUpdate:(NSDictionary *)dic
+- (BOOL)__cacheUpdate:(NSDictionary *)dic where:(NSPredicate *)filter
 {
-    NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
+    if(!filter)
+    {
+        filter = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
+    }
+
     NSArray *filterArray = [_cacheDatas filteredArrayUsingPredicate:filter];
     
-    if(filterArray.count != 1)
+    if(filterArray.count == 0)
     {
         return NO;
     }
     
-    NSMutableDictionary *mDic = filterArray.firstObject;
-    [mDic setDictionary:dic];
+    BOOL result = NO;
     
-    _statusChanged ? _statusChanged(SRPPlistStatusCacheUpdate) : nil;
+    for(NSMutableDictionary *mDic in filterArray)
+    {
+        for(NSString *key in [dic allKeys])
+        {
+            if(mDic[key] == dic[key] || [mDic[key]isEqual:dic[key]])
+            {
+                continue;
+            }
+        
+            result = YES;
+            mDic[key] = dic[key];
+        }
+    }
     
-    return YES;
+    return result;
 }
 
 #pragma mark Disk 修改
-- (BOOL)__diskUpdate:(NSDictionary *)dic
+- (BOOL)__diskUpdate:(NSDictionary *)dic where:(NSPredicate *)filter
 {
+    if(!filter)
+    {
+        filter = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
+    }
+    
     NSMutableArray *diskArray = [self __diskArray];
-    NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
     NSArray *filterArray = [diskArray filteredArrayUsingPredicate:filter];
     
-    if(filterArray.count != 1)
+    if(filterArray.count == 0)
     {
         return NO;
     }
     
-    NSMutableDictionary *mDic = filterArray.firstObject;
-    [mDic setDictionary:dic];
+    BOOL result = NO;
     
-    BOOL result = [self __saveToDisk:diskArray];
+    for(NSMutableDictionary *mDic in filterArray)
+    {
+        for(NSString *key in [dic allKeys])
+        {
+            if(mDic[key] == dic[key] || [mDic[key]isEqual:dic[key]] || [mDic[key]hash] == [dic[key]hash])
+            {
+                continue;
+            }
+        
+            result = YES;
+            mDic[key] = dic[key];
+        }
+    }
+    
+    if(!result)
+    {
+        return NO;
+    }
+    
+    // Update = YES, but save to disk 還沒確定
+    result = [self __saveToDisk:diskArray];
     
     if(result)
     {
-        _statusChanged ? _statusChanged(SRPPlistStatusDiskUpdate) : nil;
+        [[NSNotificationCenter defaultCenter]postNotificationName:SRPPlistDiskStatusNotificaion
+                                                           object:@(SRPPlistDiskStatusUpdate)];
     }
     
     return result;
 }
 
 #pragma mark Cache 刪除
-- (BOOL)__cacheRemove:(NSDictionary *)dic
+- (BOOL)__cacheRemoveByFilter:(NSPredicate *)filter
 {
-    NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
+    //NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
     NSArray *filterArray = [_cacheDatas filteredArrayUsingPredicate:filter];
     
-    if(filterArray.count != 1)
+    if(!filterArray.count)
     {
         return NO;
     }
     
     [_cacheDatas removeObjectsInArray:filterArray];
     
-    _statusChanged ? _statusChanged(SRPPlistStatusCacheRemove) : nil;
-    
     return YES;
 }
 
 #pragma mark Disk 刪除
-- (BOOL)__diskRemove:(NSDictionary *)dic
+- (BOOL)__diskRemoveByFilter:(NSPredicate *)filter
 {
     NSMutableArray *diskArray = [self __diskArray];
-    NSPredicate *filter  = [NSPredicate predicateWithFormat:@"Id == %@", dic[@"Id"]];
-    NSArray *filterArray = [diskArray filteredArrayUsingPredicate:filter];
+    NSArray *filterArray      = [diskArray filteredArrayUsingPredicate:filter];
     
-    if(filterArray.count != 1)
+    if(!filterArray.count)
     {
         return NO;
     }
@@ -307,7 +404,8 @@
     
     if(result)
     {
-        _statusChanged ? _statusChanged(SRPPlistStatusDiskRemove) : nil;
+        [[NSNotificationCenter defaultCenter]postNotificationName:SRPPlistDiskStatusNotificaion
+                                                           object:@(SRPPlistDiskStatusRemove)];
     }
     
     return result;
@@ -317,7 +415,7 @@
 - (BOOL)__cacheRemoveAll
 {
     [_cacheDatas removeAllObjects];
-    _statusChanged ? _statusChanged(SRPPlistStatusCacheRemoveAll) : nil;
+    
     return YES;
 }
 
@@ -331,7 +429,8 @@
     
     if(result)
     {
-        _statusChanged ? _statusChanged(SRPPlistStatusDiskRemoveAll) : nil;
+        [[NSNotificationCenter defaultCenter]postNotificationName:SRPPlistDiskStatusNotificaion
+                                                           object:@(SRPPlistDiskStausRemoveAll)];
     }
     
     return result;

@@ -6,20 +6,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, SRPPlistStatus)
+extern NSString * const SRPPlistDiskStatusNotificaion;
+
+typedef NS_ENUM(NSInteger, SRPPlistDiskStatus)
 {
-    SRPPlistStatusCacheAdd,
-    SRPPlistStatusCacheUpdate,
-    SRPPlistStatusCacheRemove,
-    SRPPlistStatusCacheRemoveAll,
-    SRPPlistStatusDiskAdd,
-    SRPPlistStatusDiskUpdate,
-    SRPPlistStatusDiskRemove,
-    SRPPlistStatusDiskRemoveAll,
-    SRPPlistStatusDiskSave
+    SRPPlistDiskStatusAdd      = 0,
+    SRPPlistDiskStatusUpdate   = 1,
+    SRPPlistDiskStatusRemove   = 2,
+    SRPPlistDiskStausRemoveAll = 3
 };
 
-typedef void(^SRPPlistStatusChanged)(SRPPlistStatus status);
 
 /**
  * Plist as DataBase.
@@ -30,11 +26,6 @@ typedef void(^SRPPlistStatusChanged)(SRPPlistStatus status);
 ///-----------------------------------------------------------------------------
 /// @name Properties
 ///-----------------------------------------------------------------------------
-
-/**
- *  SRPPlist 狀態改變 block.
- */
-@property (nonatomic, copy) SRPPlistStatusChanged statusChanged;
 
 /**
  *  是否使用 Cache, Default = YES.
@@ -60,6 +51,16 @@ typedef void(^SRPPlistStatusChanged)(SRPPlistStatus status);
 - (instancetype)initWithName:(NSString *)name;
 
 /**
+ *  新增或更新.
+ *
+ *  @param dic    新增或更新的資料.
+ *  @param filter 過濾條件, 當過濾條件成功將執行 update:, 失敗將執行 add:, filter = nil 時, 將強制 add: .
+ *
+ *  @return 新增或更新成功.
+ */
+- (BOOL)createOrUpdate:(NSDictionary *)dic where:(nullable NSPredicate *)filter;
+
+/**
  *  新增.
  *
  *  @param dic 新增的資料.
@@ -78,6 +79,16 @@ typedef void(^SRPPlistStatusChanged)(SRPPlistStatus status);
 - (BOOL)update:(NSDictionary *)dic;
 
 /**
+ *  修改 by Filter.
+ *
+ *  @param dic    更新的資料.
+ *  @param filter 過濾條件.
+ *
+ *  @return 是否更新成功.
+ */
+- (BOOL)update:(NSDictionary *)dic where:(NSPredicate *)filter;
+
+/**
  *  刪除.
  *
  *  @param dic 刪除的資料.
@@ -85,6 +96,15 @@ typedef void(^SRPPlistStatusChanged)(SRPPlistStatus status);
  *  @return 刪除是否成功.
  */
 - (BOOL)remove:(NSDictionary *)dic;
+
+/**
+ *  刪除 by Filter.
+ *
+ *  @param filter 過濾條件.
+ *
+ *  @return 刪除是否成功.
+ */
+- (BOOL)removeByFilter:(NSPredicate *)filter;
 
 /**
  *  刪除全部.
