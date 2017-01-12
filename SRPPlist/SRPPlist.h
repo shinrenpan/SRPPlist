@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *name;
 
 /**
- *  是否使用 Cache, Default = YES.
+ *  是否使用 Cache, Default = NO.
  *
  *  Cache = YES 時, 所有資料在 save 前, 將不會儲存到 Disk 裡, 並且所有操作都返回 NO.
  *
