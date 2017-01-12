@@ -80,7 +80,7 @@ NSMutableDictionary *user = ...... from db
 [_db remove:user];
 
 NSPredicate *filter = [NSPredicate predicateWithFormat:@"Id == 213D74EE-9799-471A-8EDB-02E7B1813BDA"];
-[_db removeByFilter:filter];
+[_db removeWhere:filter];
 
 [_db removeAll];
 
