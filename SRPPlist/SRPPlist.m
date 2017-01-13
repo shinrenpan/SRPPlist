@@ -300,13 +300,14 @@
 - (NSArray<NSMutableDictionary *> *)queryWhere:(NSPredicate *)filter sort:(NSArray<NSSortDescriptor *> *)sort
 {
     NSMutableArray *diskArray = [self __diskArray];
+    NSMutableArray *results   = [[diskArray filteredArrayUsingPredicate:filter]mutableCopy];
     
     if(sort)
     {
-        [diskArray sortUsingDescriptors:sort];
+        [results sortUsingDescriptors:sort];
     }
     
-    return [[diskArray filteredArrayUsingPredicate:filter]copy];
+    return [results copy];
 }
 
 #pragma mark 查詢全部
