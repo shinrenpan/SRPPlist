@@ -1,10 +1,17 @@
+# SRPPlist #
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
 Plist as database.
+
+
 
 ## 安裝 ##
 使用 [Carthage](https://github.com/Carthage/Carthage) 安裝.
 
 
 ## 使用 ##
+
+
 
 ### 初始化 ###
 使用 `initWithName:` 而不是使用 `init`.  
@@ -134,20 +141,19 @@ SRPPlist 使用 Notification 通知變化, 當 cache = YES, 將不通知.
 cache = NO 時, 支援以下變化通知:
 
 1. 新增一筆資料時:  
-	`NotificationName = SRPPLIST_db.name_ADD`
+	`NotificationName = SRPPLIST_<Plsit name 大寫>_ADD`
 2. 修改一筆資料時:  
-	`NotificationName = SRPPLIST_db.name_UPDATE`
+	`NotificationName = SRPPLIST_<Plsit name 大寫>_UPDATE`
 3. 移除一筆資料時:  
-	`NotificationName = SRPPLIST_db.name_REMOVE`
+	`NotificationName = SRPPLIST_<Plsit name 大寫>_REMOVE`
 4. 移除所有資料時:  
-	`NotificationName = SRPPLIST_db.name_REMOVEALL`
+	`NotificationName = SRPPLIST_<Plsit name 大寫>_REMOVEALL`
 	
 以下面為例子:
 
 ```objc
-SRPPlist *db1 = [[SRPPlist alloc]initWithName:@"db"];
-
-NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_UPDATE", _db1.name];
+SRPPlist *db1  = [[SRPPlist alloc]initWithName:@"db"];
+NSString *name = @"SRPPLIST_DB_UPDATE";
 
 [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(__dbUpdate:) name:name object:nil];
 ```

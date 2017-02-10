@@ -200,7 +200,7 @@
     if(updated)
     {
         NSDictionary *userInfo = @{@"old": [old copy], @"new": [new copy]};
-        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_UPDATE", self.name];
+        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_UPDATE", _name.uppercaseString];
         
         [[NSNotificationCenter defaultCenter]postNotificationName:name object:nil userInfo:userInfo];
     }
@@ -265,7 +265,7 @@
     if(result)
     {
         NSDictionary *userInfo = @{@"old": [old copy]};
-        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_REMOVE", self.name];
+        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_REMOVE", _name.uppercaseString];
         
         [[NSNotificationCenter defaultCenter]postNotificationName:name object:nil userInfo:userInfo];
     }
@@ -288,7 +288,7 @@
     
     if(result)
     {
-        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_REMOVEALL", self.name];
+        NSString *name = [NSString stringWithFormat:@"SRPPLIST_%@_REMOVEALL", _name.uppercaseString];
         
         [[NSNotificationCenter defaultCenter]postNotificationName:name object:nil userInfo:nil];
     }
@@ -393,7 +393,7 @@
 - (NSString *)__plistPath
 {
     NSString *rootPath = [self __rootPath];
-    NSString *fileName = [NSString stringWithFormat:@"%@.plist", self.name];
+    NSString *fileName = [NSString stringWithFormat:@"%@.plist", _name];
     NSString *result   = [rootPath stringByAppendingPathComponent:fileName];
     
     return result;
