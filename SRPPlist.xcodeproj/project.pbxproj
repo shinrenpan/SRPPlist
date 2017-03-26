@@ -7,18 +7,68 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		46472AB46B79BD950648F497812F9942 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C15D75C5D1968C4F26DB58C44F712316 /* LaunchScreen.storyboard */; };
+		4E1FFE8F7ADC229A037AE5E2B70BCFB3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 280D708DF2692344AF5373BF7D2DBDC2 /* Assets.xcassets */; };
+		541B19A94F42E22362A37F446C480A64 /* SRPPlist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5971AB1FEAAFE2CB4E427ECFDBB2DF15 /* SRPPlist.framework */; };
+		5F25A1484195C9E86445BE5B886D91BD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A7DE9859AD71A93D9A51CE00213219D /* Main.storyboard */; };
+		69E806A9F4CC2E22817F3B8919139CD4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 45825714D510E3980266AD74A6C63245 /* AppDelegate.m */; };
+		7C9B8BBF5BD0464DD4972D0F1EEC3DE1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 606DE42B4105BA191CA15F90B624289B /* main.m */; };
 		843371AD8AB6039EB5C5EB4362A01681 /* SRPPlist.h in Headers */ = {isa = PBXBuildFile; fileRef = C2B3F27492F5C0ED9725C9302E3C9469 /* SRPPlist.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D22C59F0C078F6E6914C4C40356E1B80 /* SRPPlist.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5971AB1FEAAFE2CB4E427ECFDBB2DF15 /* SRPPlist.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FBFB1C0D3FE2F00A0D8A0919CB1B13BF /* SRPPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = E9660DC52417BCEEADFC6459FC3F841C /* SRPPlist.m */; };
+		FCFB05A4C00E4F8A7FD7DB3590A21095 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C44280571DA245E73E53D1F5740360 /* ViewController.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CEF9C203A38A2E9042BEB1B96A6D8632 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 133D7E32C2E920A8E00F6657C99184B9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BC9A6122755A9CD5C1C3833A2A04E897;
+			remoteInfo = SRPPlist;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E60EB42C99974DB9F5CFEB2D5182EF6C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D22C59F0C078F6E6914C4C40356E1B80 /* SRPPlist.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0A7FC8F49D10881483710DA90E740627 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		20A5362A35FBC8722C1D1E15DAFAE27E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		280D708DF2692344AF5373BF7D2DBDC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		43F6829F2E1F656021BC6F02D34CD14A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		45825714D510E3980266AD74A6C63245 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5971AB1FEAAFE2CB4E427ECFDBB2DF15 /* SRPPlist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SRPPlist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		606DE42B4105BA191CA15F90B624289B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		64F9674D1F9BADB9E3D71341B58E36D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		91A17FCE4DD84235A6925B670695BA6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B99B7082A9169C9EC692ED50C9D33E74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C1C44280571DA245E73E53D1F5740360 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		C2B3F27492F5C0ED9725C9302E3C9469 /* SRPPlist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRPPlist.h; sourceTree = "<group>"; };
+		CECA31DBB799AAB9FC32877A08129E95 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9660DC52417BCEEADFC6459FC3F841C /* SRPPlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRPPlist.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		CC3B1A3F0B4E083BEB7EC3DC2C5A412A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				541B19A94F42E22362A37F446C480A64 /* SRPPlist.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CE963EA82F450CCF1FAAC6E430AC3CCC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -29,9 +79,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		29A5D220211B0064DB81D4CB0531A452 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				606DE42B4105BA191CA15F90B624289B /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		737F69630FE31CAB2FF143CE8E685E73 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				CECA31DBB799AAB9FC32877A08129E95 /* Demo.app */,
 				5971AB1FEAAFE2CB4E427ECFDBB2DF15 /* SRPPlist.framework */,
 			);
 			name = Products;
@@ -40,9 +99,26 @@
 		8CFBBB1F05AE2FB89F6BED0DE1CBBE25 = {
 			isa = PBXGroup;
 			children = (
+				B8B655BCEEC7FAB7D20A6E5717992685 /* Demo */,
 				737F69630FE31CAB2FF143CE8E685E73 /* Products */,
 				BDCDBBAB82D00E803920744442944BC2 /* SRPPlist */,
 			);
+			sourceTree = "<group>";
+		};
+		B8B655BCEEC7FAB7D20A6E5717992685 /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				29A5D220211B0064DB81D4CB0531A452 /* Supporting Files */,
+				20A5362A35FBC8722C1D1E15DAFAE27E /* AppDelegate.h */,
+				45825714D510E3980266AD74A6C63245 /* AppDelegate.m */,
+				280D708DF2692344AF5373BF7D2DBDC2 /* Assets.xcassets */,
+				B99B7082A9169C9EC692ED50C9D33E74 /* Info.plist */,
+				C15D75C5D1968C4F26DB58C44F712316 /* LaunchScreen.storyboard */,
+				8A7DE9859AD71A93D9A51CE00213219D /* Main.storyboard */,
+				43F6829F2E1F656021BC6F02D34CD14A /* ViewController.h */,
+				C1C44280571DA245E73E53D1F5740360 /* ViewController.m */,
+			);
+			path = Demo;
 			sourceTree = "<group>";
 		};
 		BDCDBBAB82D00E803920744442944BC2 /* SRPPlist */ = {
@@ -87,6 +163,25 @@
 			productReference = 5971AB1FEAAFE2CB4E427ECFDBB2DF15 /* SRPPlist.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		C8F59C942493D96A1226ECD952236D32 /* Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28058605C10739F58599E303FD1C39F4 /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildPhases = (
+				30F7AA27F888AE07557A1923C00163C4 /* Sources */,
+				CC3B1A3F0B4E083BEB7EC3DC2C5A412A /* Frameworks */,
+				DE8AED3E6F0EE99C064C9D93AADE1AD9 /* Resources */,
+				E60EB42C99974DB9F5CFEB2D5182EF6C /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C45553BB8357A2D50815DC9D354772F4 /* PBXTargetDependency */,
+			);
+			name = Demo;
+			productName = Demo;
+			productReference = CECA31DBB799AAB9FC32877A08129E95 /* Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -98,7 +193,11 @@
 				TargetAttributes = {
 					BC9A6122755A9CD5C1C3833A2A04E897 = {
 						CreatedOnToolsVersion = 8.1;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
+					};
+					C8F59C942493D96A1226ECD952236D32 = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -108,6 +207,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 8CFBBB1F05AE2FB89F6BED0DE1CBBE25;
 			productRefGroup = 737F69630FE31CAB2FF143CE8E685E73 /* Products */;
@@ -115,6 +215,7 @@
 			projectRoot = "";
 			targets = (
 				BC9A6122755A9CD5C1C3833A2A04E897 /* SRPPlist */,
+				C8F59C942493D96A1226ECD952236D32 /* Demo */,
 			);
 		};
 /* End PBXProject section */
@@ -127,9 +228,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DE8AED3E6F0EE99C064C9D93AADE1AD9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E1FFE8F7ADC229A037AE5E2B70BCFB3 /* Assets.xcassets in Resources */,
+				46472AB46B79BD950648F497812F9942 /* LaunchScreen.storyboard in Resources */,
+				5F25A1484195C9E86445BE5B886D91BD /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		30F7AA27F888AE07557A1923C00163C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69E806A9F4CC2E22817F3B8919139CD4 /* AppDelegate.m in Sources */,
+				FCFB05A4C00E4F8A7FD7DB3590A21095 /* ViewController.m in Sources */,
+				7C9B8BBF5BD0464DD4972D0F1EEC3DE1 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55B5CE2A8F38E31788894EAB9BE30702 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -140,7 +261,47 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C45553BB8357A2D50815DC9D354772F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BC9A6122755A9CD5C1C3833A2A04E897 /* SRPPlist */;
+			targetProxy = CEF9C203A38A2E9042BEB1B96A6D8632 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		8A7DE9859AD71A93D9A51CE00213219D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91A17FCE4DD84235A6925B670695BA6A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C15D75C5D1968C4F26DB58C44F712316 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A7FC8F49D10881483710DA90E740627 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		81ED10DA1044A57D1A031656163A93B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shinrenpan.Demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
 		0D4D46061DFA202C906A77DF700ED1A1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -152,12 +313,25 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SRPPlist/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_CFLAGS = "-fembed-bitcode";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinrenpan.SRPPlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		591E731D250A76ACE140ACBE0E0354D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shinrenpan.Demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -172,7 +346,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SRPPlist/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_CFLAGS = "-fembed-bitcode-marker";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shinrenpan.SRPPlist;
@@ -282,6 +456,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		28058605C10739F58599E303FD1C39F4 /* Build configuration list for PBXNativeTarget "Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81ED10DA1044A57D1A031656163A93B2 /* Debug */,
+				591E731D250A76ACE140ACBE0E0354D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B57EB6ACE6F123FCE71A7A906CBB38D1 /* Build configuration list for PBXProject "SRPPlist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
