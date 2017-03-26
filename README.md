@@ -25,9 +25,9 @@ Plist as database.
 ### 查詢 ###
 
 ```objc
-+ (nullable NSArray <NSDictionary *> *)queryFromPlist:(NSString *)name
-                                                where:(nullable NSPredicate *)where
-                                              orderBy:(nullable NSArray <NSSortDescriptor *> *)orders;
++ (nullable NSArray <NSDictionary *> *)plist:(NSString *)name
+                                  queryWhere:(nullable NSPredicate *)where
+                                     orderBy:(nullable NSArray <NSSortDescriptor *> *)orders;
 ```
 
 其中
@@ -73,7 +73,7 @@ Plist as database.
 ### 刪除 ###
 
 ```objc
-+ (BOOL)removeFromPlist:(NSString *)name where:(NSPredicate *)where;
++ (BOOL)plist:(NSString *)name removeWhere:(NSPredicate *)where;
 ```
 
 其中

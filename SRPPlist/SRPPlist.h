@@ -25,9 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param orders 排序條件式.
  @return 返回查詢資料.
  */
-+ (nullable NSArray <NSDictionary *> *)queryFromPlist:(NSString *)name
-                                                where:(nullable NSPredicate *)where
-                                              orderBy:(nullable NSArray <NSSortDescriptor *> *)orders;
++ (nullable NSArray <NSDictionary *> *)plist:(NSString *)name
+                                  queryWhere:(nullable NSPredicate *)where
+                                     orderBy:(nullable NSArray <NSSortDescriptor *> *)orders;
 
 /**
  新增資料.
@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param where 過濾條件式.
  @return 返回刪除資料成功與否.
  */
-+ (BOOL)removeFromPlist:(NSString *)name where:(NSPredicate *)where;
++ (BOOL)plist:(NSString *)name removeWhere:(NSPredicate *)where;
 
 /**
  移除 plist.

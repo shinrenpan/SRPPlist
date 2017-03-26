@@ -9,9 +9,9 @@
 
 #pragma mark - Class methods
 #pragma mark 查詢
-+ (nullable NSArray<NSDictionary *> *)queryFromPlist:(nonnull NSString *)name
-                                               where:(nullable NSPredicate *)where
-                                             orderBy:(nullable NSArray<NSSortDescriptor *> *)orders
++ (nullable NSArray<NSDictionary *> *)plist:(nonnull NSString *)name
+                                 queryWhere:(nullable NSPredicate *)where
+                                    orderBy:(nullable NSArray<NSSortDescriptor *> *)orders
 {
     // Plist 檔案不存在, 查詢沒有意義, return nil
     if(![self __plistExist:name])
@@ -84,7 +84,7 @@
 }
 
 #pragma mark 刪除
-+ (BOOL)removeFromPlist:(nonnull NSString *)name where:(nonnull NSPredicate *)where
++ (BOOL)plist:(NSString *)name removeWhere:(NSPredicate *)where
 {
     // Plist 檔案不存在, remove 沒有意義, 就當作刪除成功吧
     if(![self __plistExist:name])

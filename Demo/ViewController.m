@@ -65,7 +65,7 @@ static NSString * const PLIST_NAME = @"Numbers";
         NSString *Id       = dic[@"id"];
         NSPredicate *where = [NSPredicate predicateWithFormat:@"id=%@", Id];
         
-        if([SRPPlist removeFromPlist:PLIST_NAME where:where])
+        if([SRPPlist plist:PLIST_NAME removeWhere:where])
         {
             [self __queryAll];
         }
@@ -91,7 +91,7 @@ static NSString * const PLIST_NAME = @"Numbers";
 {
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"number" ascending:YES];
     
-    _dataSource = [[SRPPlist queryFromPlist:PLIST_NAME where:nil orderBy:@[sort]]copy];
+    _dataSource = [[SRPPlist plist:PLIST_NAME queryWhere:nil orderBy:@[sort]]copy];
     
     [self.tableView reloadData];
 }
