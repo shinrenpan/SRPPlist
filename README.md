@@ -50,10 +50,6 @@ Plist as database.
 - name: plist 名稱.
 - dics: 要新增的資料, 單筆或多筆.
 
-新增的資料將自動產生 **`id`** (NSUUID string), **`update`** (NSDate NSTimeInterval) 欄位.
-
-> 請保留 id, 與 update 欄位
-
 
 ### 修改 ###
 
