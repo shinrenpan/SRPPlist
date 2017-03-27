@@ -78,11 +78,11 @@ static NSString * const PLIST_NAME = @"Numbers";
 #pragma mark 按下 add
 - (IBAction)addItemClicked:(id)sender
 {
-   NSNumber *number  =  @(arc4random() % 100);
-   NSDictionary *dic = @{@"number": number};
-   
-   [SRPPlist plist:PLIST_NAME insert:@[dic]];
-   [self __queryAll];
+    NSNumber *number  = @(arc4random() % 100);
+    NSDictionary *dic = @{@"number": number, @"id": [NSUUID UUID].UUIDString};
+
+    [SRPPlist plist:PLIST_NAME insert:@[dic]];
+    [self __queryAll];
 }
 
 #pragma mark - Private

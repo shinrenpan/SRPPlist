@@ -19,7 +19,7 @@
         return nil;
     }
     
-    NSMutableArray <NSMutableDictionary *> *results = [self __allFrom:name];
+    NSMutableArray *results = [self __allFrom:name forMutableDictionary:NO];
     
     if(where)
     {
@@ -38,20 +38,9 @@
 #pragma mark 新增
 + (BOOL)plist:(nonnull NSString *)name insert:(nonnull NSArray<NSDictionary *> *)dics
 {
-    NSMutableArray <NSMutableDictionary *> *all = [self __allFrom:name];
+    NSMutableArray *all = [self __allFrom:name forMutableDictionary:NO];
     
-    for(NSDictionary *dic in dics)
-    {
-        // 幫要寫入的資料新增 id, 跟 update 欄位.
-        // id 欄位為: UUID string.
-        // update 為 NSDate.timeIntervalSince1970
-        NSMutableDictionary *mDic = [dic mutableCopy];
-        
-        mDic[@"id"]     = [NSUUID UUID].UUIDString;
-        mDic[@"update"] = @([NSDate date].timeIntervalSince1970);
-        
-        [all addObject:mDic];
-    }
+    [all addObjectsFromArray:dics];
     
     return [self __save:all toPlist:name];
 }
@@ -65,8 +54,7 @@
         return NO;
     }
     
-    NSMutableArray <NSMutableDictionary *> *all = [self __allFrom:name];
-    
+    NSMutableArray *all  = [self __allFrom:name forMutableDictionary:YES];
     NSArray *filterArray = [all filteredArrayUsingPredicate:where];
     
     // where 不成立
@@ -92,7 +80,7 @@
         return YES;
     }
     
-    NSMutableArray <NSMutableDictionary *> *all = [self __allFrom:name];
+    NSMutableArray *all  = [self __allFrom:name forMutableDictionary:NO];
     NSArray *filterArray = [all filteredArrayUsingPredicate:where];
     
     // where 不成立
@@ -180,13 +168,23 @@
 }
 
 #pragma mark Plist 裡全部資料
-+ (nonnull NSMutableArray <NSMutableDictionary *> *)__allFrom:(nonnull NSString *)name
++ (nonnull NSMutableArray <NSDictionary *> *)__allFrom:(nonnull NSString *)name forMutableDictionary:(BOOL)mutable
 {
     NSString *plistPath = [self __plistPathWith:name];
     NSArray <NSDictionary *> *temp = [NSArray arrayWithContentsOfFile:plistPath];
     
+    NSMutableArray *results;
+    
+    if(!mutable)
+    {
+        results = [NSMutableArray arrayWithArray:temp];
+        
+        return results;
+    }
+    
     // 可能需要 update, 所以將 plist 裡的 NSDictionary 轉成 NSMutableDictionary
-    NSMutableArray <NSMutableDictionary *> *results = [NSMutableArray array];
+    results = [NSMutableArray array];
+    
     for(NSDictionary *dic in temp)
     {
         [results addObject:[dic mutableCopy]];
