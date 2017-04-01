@@ -120,7 +120,7 @@
     NSString *documentsDirectory =
     NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject;
     
-    NSString *result = [documentsDirectory stringByAppendingPathComponent:@"SRPPlist"];
+    NSString *result = [documentsDirectory stringByAppendingPathComponent:@"com.shinrenpan.SRPPlist"];
     
     return result;
 }
